@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VLTAVA — Where Jewels Are Born</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Tenor+Sans&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div class="grain"></div>
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <div class="nav-logo">
+    <svg width="16" height="16" viewBox="0 0 16 16"><polygon points="8,1 15,8 8,15 1,8" fill="none" stroke="currentColor" stroke-width="1.1"/><polygon points="8,4 12,8 8,12 4,8" fill="currentColor" opacity="0.35"/></svg>
+    <span>VLTAVA</span>
+  </div>
+  <div class="nav-links">
+    <a href="#studio">Studio</a>
+    <a href="#process">Process</a>
+    <a href="#about">Vision</a>
+    <button class="nav-service-btn" onclick="openServices()">Services</button>
+  </div>
+  <button class="nav-book-btn" onclick="openBookDemo()">Book a Demo</button>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="hero">
+  <div class="hero-left">
+    <p class="hero-label">Prague · Est. 2026</p>
+    <h1 class="hero-title">Design jewels<br/><em>that don't exist yet.</em></h1>
+    <p class="hero-body">Describe any piece in plain language. VLTAVA renders a photorealistic image, a full manufacturing blueprint, and luxury copy — in seconds.</p>
+    <div class="hero-ctas">
+      <a href="#studio" class="cta-primary">Begin Designing</a>
+      <button class="cta-ghost" onclick="document.getElementById('studio').scrollIntoView({behavior:'smooth'})">See it work →</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-n">4,800+</span><span class="stat-l">Designs rendered</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><span class="stat-n">12s</span><span class="stat-l">Avg. generation</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><span class="stat-n">Free</span><span class="stat-l">Always</span></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-showcase" id="heroShowcase">
+      <div class="showcase-chrome">
+        <div class="chrome-bar"><span></span><span></span><span></span></div>
+        <div class="showcase-screen" id="showcaseScreen">
+          <div class="showcase-idle" id="showcaseIdle">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+              <polygon points="36,4 66,28 55,68 17,68 6,28" stroke="rgba(212,175,95,0.4)" stroke-width="1" fill="none"/>
+              <polygon points="36,4 66,28 36,22" fill="rgba(212,175,95,0.12)"/>
+              <polygon points="36,4 6,28 36,22" fill="rgba(212,175,95,0.08)"/>
+              <polygon points="36,22 66,28 55,68" fill="rgba(212,175,95,0.06)"/>
+              <polygon points="36,22 6,28 17,68" fill="rgba(212,175,95,0.10)"/>
+              <polygon points="36,22 55,68 17,68" fill="rgba(212,175,95,0.18)"/>
+            </svg>
+            <p>Your jewel renders here</p>
+          </div>
+          <img id="showcaseImg" class="showcase-img hidden" alt="Generated jewel"/>
+          <div class="showcase-loading hidden" id="showcaseLoading">
+            <div class="mini-spinner"></div>
+            <p id="showcaseMsg">Rendering…</p>
+          </div>
+        </div>
+        <div class="showcase-input-row">
+          <input id="heroPrompt" type="text" placeholder="ruby halo ring in platinum…" class="showcase-input" onkeydown="if(event.key==='Enter')heroGenerate()"/>
+          <button class="showcase-btn" id="heroBtn" onclick="heroGenerate()">✦</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>Emerald Solitaire</span><em>✦</em><span>Art Deco Choker</span><em>✦</em>
+    <span>Pavé Tennis Bracelet</span><em>✦</em><span>Vintage Pearl Drop</span><em>✦</em>
+    <span>Platinum Halo Ring</span><em>✦</em><span>Sapphire Cluster</span><em>✦</em>
+    <span>Rose Gold Eternity Band</span><em>✦</em><span>Diamond Rivière</span><em>✦</em>
+    <span>Emerald Solitaire</span><em>✦</em><span>Art Deco Choker</span><em>✦</em>
+    <span>Pavé Tennis Bracelet</span><em>✦</em><span>Vintage Pearl Drop</span><em>✦</em>
+    <span>Platinum Halo Ring</span><em>✦</em><span>Sapphire Cluster</span><em>✦</em>
+    <span>Rose Gold Eternity Band</span><em>✦</em><span>Diamond Rivière</span><em>✦</em>
+  </div>
+</div>
+
+<!-- ═══ STUDIO ═══ -->
+<section class="studio" id="studio">
+  <div class="studio-head">
+    <p class="section-label">✦ The Studio</p>
+    <h2>From prompt to production-ready</h2>
+    <p class="section-sub">Describe your jewel. Every detail sharpens the output.</p>
+  </div>
+
+  <div class="studio-body">
+    <aside class="s-left glass">
+      <div class="field-block">
+        <label class="field-label">Design brief</label>
+        <textarea id="mainPrompt" class="field-ta" rows="5" placeholder="e.g. A rose gold ring with an oval emerald surrounded by a diamond halo. Art nouveau vine engraving on the band. For an engagement ring."></textarea>
+      </div>
+      <div class="field-row">
+        <div class="field-block half">
+          <label class="field-label">Piece</label>
+          <select id="selPiece" class="field-sel">
+            <option value="ring">Ring</option>
+            <option value="necklace">Necklace</option>
+            <option value="bracelet">Bracelet</option>
+            <option value="earrings">Earrings</option>
+            <option value="pendant">Pendant</option>
+            <option value="brooch">Brooch</option>
+          </select>
+        </div>
+        <div class="field-block half">
+          <label class="field-label">Metal</label>
+          <select id="selMetal" class="field-sel">
+            <option value="yellow gold 18k">Yellow Gold</option>
+            <option value="rose gold 18k">Rose Gold</option>
+            <option value="white gold 18k">White Gold</option>
+            <option value="platinum 950">Platinum</option>
+            <option value="sterling silver 925">Silver</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-block half">
+          <label class="field-label">Stone</label>
+          <select id="selStone" class="field-sel">
+            <option value="diamond">Diamond</option>
+            <option value="sapphire">Sapphire</option>
+            <option value="emerald">Emerald</option>
+            <option value="ruby">Ruby</option>
+            <option value="pearl">Pearl</option>
+            <option value="amethyst">Amethyst</option>
+            <option value="none">No Stone</option>
+          </select>
+        </div>
+        <div class="field-block half">
+          <label class="field-label">Style</label>
+          <select id="selStyle" class="field-sel">
+            <option value="modern luxury">Modern Luxury</option>
+            <option value="art deco">Art Deco</option>
+            <option value="vintage romantic">Vintage</option>
+            <option value="minimalist">Minimalist</option>
+            <option value="avant-garde">Avant-Garde</option>
+            <option value="bohemian artisan">Bohemian</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-block">
+        <label class="field-label">Generate</label>
+        <div class="toggles">
+          <label class="toggle-item on" id="togImg"><input type="checkbox" id="doImage" checked onchange="highlightToggle('togImg',this.checked)"/><span>🖼 Render</span></label>
+          <label class="toggle-item on" id="togMfg"><input type="checkbox" id="doMfg" checked onchange="highlightToggle('togMfg',this.checked)"/><span>🔩 Blueprint</span></label>
+          <label class="toggle-item on" id="togCopy"><input type="checkbox" id="doCopy" checked onchange="highlightToggle('togCopy',this.checked)"/><span>✍ Copy</span></label>
+        </div>
+      </div>
+      <div class="field-block">
+        <label class="field-label">Inspirations</label>
+        <div class="prompt-chips">
+          <button class="pchip" onclick="setPrompt(this)">Emerald halo ring</button>
+          <button class="pchip" onclick="setPrompt(this)">Art deco diamond choker</button>
+          <button class="pchip" onclick="setPrompt(this)">Twisted rose gold band</button>
+          <button class="pchip" onclick="setPrompt(this)">Pearl cascade earrings</button>
+          <button class="pchip" onclick="setPrompt(this)">Sapphire tennis bracelet</button>
+          <button class="pchip" onclick="setPrompt(this)">Vintage ruby pendant</button>
+        </div>
+      </div>
+      <button class="gen-btn" id="genBtn" onclick="generateAll()">
+        <span id="genBtnLabel">✦  Generate Design</span>
+        <div class="btn-ring hidden" id="genSpinner"></div>
+      </button>
+    </aside>
+
+    <div class="s-right">
+      <!-- Image -->
+      <div class="out-card glass" id="imgCard">
+        <div class="out-card-top">
+          <span class="out-label">Rendered Design</span>
+          <div id="imgToolbar" class="out-toolbar hidden">
+            <button class="tool-btn" onclick="downloadImg()">↓ Save</button>
+            <button class="tool-btn workshop-btn" onclick="openWorkshop()">⬡ Workshop</button>
+            <button class="tool-btn" onclick="regenImg()">↺ Regen</button>
+          </div>
+        </div>
+        <div class="img-stage" id="imgStage">
+          <div class="stage-empty" id="stageEmpty">
+            <svg viewBox="0 0 90 90" width="80" height="80"><polygon points="45,5 80,32 68,85 22,85 10,32" fill="none" stroke="rgba(212,175,95,0.22)" stroke-width="1"/><line x1="45" y1="5" x2="45" y2="28" stroke="rgba(212,175,95,0.1)" stroke-width="0.5"/><line x1="10" y1="32" x2="80" y2="32" stroke="rgba(212,175,95,0.1)" stroke-width="0.5"/><polygon points="45,28 68,85 22,85" fill="rgba(212,175,95,0.06)"/></svg>
+            <p>Your render will appear here</p>
+            <span>Fill the brief and hit Generate</span>
+          </div>
+          <div class="stage-loading hidden" id="stageLoading">
+            <div class="load-orb"></div>
+            <div class="load-steps">
+              <div class="lstep active" id="ls0">Building visual prompt</div>
+              <div class="lstep" id="ls1">Contacting Flux renderer</div>
+              <div class="lstep" id="ls2">Processing image</div>
+            </div>
+          </div>
+          <img id="resultImg" class="result-img hidden" alt="Generated jewellery design" crossorigin="anonymous"/>
+        </div>
+      </div>
+
+      <!-- Blueprint -->
+      <div class="out-card glass text-card" id="mfgCard">
+        <div class="out-card-top">
+          <span class="out-label">🔩 Manufacturing Blueprint</span>
+          <button class="tool-btn hidden" id="mfgCopyBtn" onclick="copyEl('mfgContent')">Copy</button>
+        </div>
+        <div class="out-body" id="mfgBody"><div class="out-placeholder">Blueprint generates alongside your design.</div></div>
+      </div>
+
+      <!-- Copy -->
+      <div class="out-card glass text-card" id="copyCard">
+        <div class="out-card-top">
+          <span class="out-label">✍ Marketing Copy</span>
+          <button class="tool-btn hidden" id="copyCopyBtn" onclick="copyEl('copyContent')">Copy all</button>
+        </div>
+        <div class="out-body" id="copyBody"><div class="out-placeholder">Luxury copy generates alongside your design.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WORKSHOP MODAL ═══ -->
+<div class="modal-bg hidden" id="workshopModal" onclick="if(event.target===this)closeWorkshop()">
+  <div class="modal glass">
+    <div class="modal-head">
+      <h3>Workshop <span class="modal-sub">— iterate on this design</span></h3>
+      <button class="modal-x" onclick="closeWorkshop()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="ws-cols">
+        <div class="ws-base">
+          <img id="wsBaseImg" class="ws-base-img" alt="Base design"/>
+          <p class="ws-base-label">Base Design</p>
+        </div>
+        <div class="ws-controls">
+          <label class="field-label">Modification brief</label>
+          <textarea id="wsPrompt" class="field-ta" rows="3" placeholder="e.g. Change to pear-cut sapphire, add milgrain edges, make the band thinner…"></textarea>
+          <div class="field-row" style="margin-top:12px">
+            <div class="field-block half">
+              <label class="field-label">Change metal</label>
+              <select id="wsMetal" class="field-sel">
+                <option value="">Keep same</option>
+                <option value="yellow gold 18k">Yellow Gold</option>
+                <option value="rose gold 18k">Rose Gold</option>
+                <option value="white gold 18k">White Gold</option>
+                <option value="platinum 950">Platinum</option>
+              </select>
+            </div>
+            <div class="field-block half">
+              <label class="field-label">Change stone</label>
+              <select id="wsStone" class="field-sel">
+                <option value="">Keep same</option>
+                <option value="diamond">Diamond</option>
+                <option value="sapphire">Sapphire</option>
+                <option value="emerald">Emerald</option>
+                <option value="ruby">Ruby</option>
+                <option value="pearl">Pearl</option>
+              </select>
+            </div>
+          </div>
+          <div class="ws-views">
+            <label class="field-label" style="margin-bottom:8px">Additional views</label>
+            <div class="view-chips">
+              <label class="vchip"><input type="checkbox" value="side profile view"/><span>Side Profile</span></label>
+              <label class="vchip"><input type="checkbox" value="top down flat lay"/><span>Top Down</span></label>
+              <label class="vchip"><input type="checkbox" value="worn on hand lifestyle photo"/><span>On Hand</span></label>
+              <label class="vchip"><input type="checkbox" value="macro detail close-up"/><span>Macro</span></label>
+            </div>
+          </div>
+          <button class="gen-btn" id="wsBtn" onclick="workshopGenerate()" style="margin-top:16px">
+            <span id="wsBtnLabel">✦  Generate Variation</span>
+            <div class="btn-ring hidden" id="wsSpinner"></div>
+          </button>
+        </div>
+      </div>
+      <div id="wsGallery" class="ws-gallery hidden">
+        <p class="field-label" style="margin-bottom:10px">Generated Variations</p>
+        <div class="ws-grid" id="wsGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BOOK DEMO MODAL ═══ -->
+<div class="modal-bg hidden" id="bookDemoModal" onclick="if(event.target===this)closeBookDemo()">
+  <div class="demo-modal glass" id="demoModalInner">
+    <button class="modal-x" onclick="closeBookDemo()" style="position:absolute;top:20px;right:20px">✕</button>
+
+    <div class="demo-modal-left">
+      <p class="demo-eyebrow">✦ VLTAVA for Business</p>
+      <h2 class="demo-title">Upscale into tech.<br/><em>Run your jewellery<br/>business passively.</em></h2>
+      <p class="demo-body">We deploy AI that works while you sleep — and jewellery tech that makes you look ten years ahead of every competitor in the room.</p>
+      <div class="demo-services">
+        <div class="demo-svc">
+          <span class="demo-svc-icon">🤖</span>
+          <div>
+            <strong>Agentic AI for Operations</strong>
+            <p>AI agents handle enquiries, follow-ups, order tracking, and supplier communication autonomously. Your business runs — you just review the summary each morning.</p>
+          </div>
+        </div>
+        <div class="demo-svc">
+          <span class="demo-svc-icon">🌐</span>
+          <div>
+            <strong>Website Builder — Built for Jewellers</strong>
+            <p>Not a template. A fully bespoke luxury e-commerce experience: product configurators, 3D ring viewers, AI-assisted personal styling, booking flows. Everything a maison needs online.</p>
+          </div>
+        </div>
+        <div class="demo-svc">
+          <span class="demo-svc-icon">🖼</span>
+          <div>
+            <strong>AI Design Generation Suite</strong>
+            <p>Your proprietary design studio — trained on your collections. Generate new SKUs, iterate on customer briefs, and produce photorealistic renders before touching a single gram of gold.</p>
+          </div>
+        </div>
+        <div class="demo-svc">
+          <span class="demo-svc-icon">📊</span>
+          <div>
+            <strong>More — Custom to Your Maison</strong>
+            <p>Inventory intelligence, pricing automation, trend forecasting, multi-channel marketing automation. We build what your business actually needs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-modal-right">
+      <div class="demo-pricing-card glass">
+        <p class="demo-pricing-label">Pricing</p>
+        <h3 class="demo-pricing-title">Contact Sales</h3>
+        <p class="demo-pricing-sub">Every deployment is custom-scoped. No fixed tiers — you pay for what you need, nothing you don't.</p>
+        <div class="demo-pricing-includes">
+          <span>✓ Dedicated onboarding</span>
+          <span>✓ Custom AI model training</span>
+          <span>✓ White-glove integration</span>
+          <span>✓ Ongoing support contract</span>
+          <span>✓ NDA + data ownership</span>
+        </div>
+        <a href="https://cal.com/soham-jariwala-4fvbkw/15min" target="_blank" rel="noopener" class="demo-cal-btn" onclick="closeBookDemo()">
+          <span>Book a 15-min Call</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </a>
+        <p class="demo-cal-note">Book free trail</p>
+      </div>
+      <div class="demo-quote glass">
+        <p>"The gap between a jewel imagined and a jewel built has never been smaller."</p>
+        <span>— VLTAVA, Prague 2026</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SERVICES MODAL ═══ -->
+<div class="modal-bg hidden" id="servicesModal" onclick="if(event.target===this)closeServices()">
+  <div class="services-modal glass" id="servicesModalInner">
+    <button class="modal-x" onclick="closeServices()" style="position:absolute;top:20px;right:20px">✕</button>
+    <p class="demo-eyebrow" style="margin-bottom:10px">✦ VLTAVA Services</p>
+    <h2 class="demo-title" style="font-size:clamp(28px,3vw,44px);margin-bottom:8px">What we build<br/><em>for your maison.</em></h2>
+    <p class="demo-body" style="margin-bottom:36px;max-width:600px">Every service is specific to the jewellery industry. Not generic software — jewellery-native intelligence.</p>
+    <div class="svc-grid">
+      <div class="svc-card glass">
+        <div class="svc-num">01</div>
+        <div class="svc-icon">🤖</div>
+        <h4>AI Agent Implementation</h4>
+        <p>Autonomous agents for client communication, order management, supplier coordination, and after-sales. Trained on your brand voice. Deployed in your systems. Running 24/7.</p>
+        <div class="svc-tags"><span>Jewellery CRM</span><span>WhatsApp & Email</span><span>n8n connection</span></div>
+      </div>
+      <div class="svc-card glass">
+        <div class="svc-num">02</div>
+        <div class="svc-icon">🌐</div>
+        <h4>Website Management & Build</h4>
+        <p>Luxury e-commerce built for jewellers: 3D product views, ring configurators, AI personal styling, appointment booking, and real-time inventory. Not a template — a maison-grade digital presence.</p>
+        <div class="svc-tags"><span>E-Commerce</span><span>3D Configurator</span><span>Booking Flow</span></div>
+      </div>
+      <div class="svc-card glass">
+        <div class="svc-num">03</div>
+        <div class="svc-icon">🖼</div>
+        <h4>AI Design Generation</h4>
+        <p>Your proprietary studio AI, trained on your existing collections and signature style. Generate new designs for client briefs, produce photorealistic renders, and iterate instantly — before committing any metal.</p>
+        <div class="svc-tags"><span>Brand-trained AI</span><span>Client Renders</span><span>New SKUs</span></div>
+      </div>
+      <div class="svc-card glass">
+        <div class="svc-num">04</div>
+        <div class="svc-icon">📈</div>
+        <h4>Trend & Inventory Intelligence</h4>
+        <p>Real-time market trend analysis specific to fine jewellery. Inventory demand forecasting. Pricing optimisation. Know what to make before your competitors know the season has changed.</p>
+        <div class="svc-tags"><span>Market Intelligence</span><span>Forecasting</span><span>Pricing AI</span></div>
+      </div>
+      <div class="svc-card glass">
+        <div class="svc-num">05</div>
+        <div class="svc-icon">📣</div>
+        <h4>AI Marketing Automation</h4>
+        <p>Campaign copy, editorial photography prompts, social calendars, and email sequences — generated in your brand's editorial voice. Multi-channel, multi-language, always on.</p>
+        <div class="svc-tags"><span>Content Generation</span><span>Social Automation</span><span>Email Flows</span></div>
+      </div>
+      <div class="svc-card glass">
+        <div class="svc-num">06</div>
+        <div class="svc-icon">🔒</div>
+        <h4>Data & IP Protection</h4>
+        <p>Private model deployment. Your designs, your data, your IP — never shared, never used to train shared models. Enterprise-grade security for heritage brands and growing maisons alike.</p>
+        <div class="svc-tags"><span>Private Deployment</span><span>IP Ownership</span><span>NDA Included</span></div>
+      </div>
+    </div>
+    <div class="svc-cta">
+      <a href="https://cal.com/soham-jariwala-4fvbkw/15min" target="_blank" rel="noopener" class="demo-cal-btn" onclick="closeServices()">
+        <span>Book a 15-min Call</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROCESS ═══ -->
+<section class="process-section" id="process">
+  <p class="section-label">✦ The Process</p>
+  <h2>From first word to factory floor</h2>
+  <div class="process-steps">
+    <div class="ps glass"><div class="ps-n">01</div><div class="ps-ico">✍</div><h3>Describe freely</h3><p>Type your vision in plain language. Stone, metal, occasion, style — anything. The richer the brief, the sharper the render.</p></div>
+    <div class="ps-arr">→</div>
+    <div class="ps glass"><div class="ps-n">02</div><div class="ps-ico">🖼</div><h3>Render instantly</h3><p>VLTAVA converts your brief into a precision prompt and queries the Flux model. A studio-quality render in ~12 seconds.</p></div>
+    <div class="ps-arr">→</div>
+    <div class="ps glass"><div class="ps-n">03</div><div class="ps-ico">🔩</div><h3>Blueprint for makers</h3><p>Full manufacturing specification: alloy grade, stone dimensions, setting type, prong count, bench steps, tools, QC notes. Ready for any goldsmith.</p></div>
+    <div class="ps-arr">→</div>
+    <div class="ps glass"><div class="ps-n">04</div><div class="ps-ico">⬡</div><h3>Iterate in Workshop</h3><p>Open any design in the Workshop. Change stone, metal, angle. Generate profiles, macro shots, on-hand views — endlessly.</p></div>
+  </div>
+</section>
+
+<!-- ═══ VISION ═══ -->
+<section class="vision-section" id="about">
+  <p class="section-label">✦ The Vision</p>
+  <blockquote class="vision-q">"Every jewel that has ever existed began as a thought.<br/><em>VLTAVA makes that gap disappear.</em>"</blockquote>
+  <p class="vision-body">We built VLTAVA in Prague because this city knows what it means to obsess over craft. It is home to some of Europe's finest goldsmiths — and some of the world's most ambitious designers. VLTAVA is for both. Describe a piece in human language, receive something a craftsperson can actually build.</p>
+  <div class="pillars">
+    <div class="pillar glass"><span class="p-ico">🏆</span><h4>YC-ready scale</h4><p>Built for global jewellers, independent designers, and luxury houses alike.</p></div>
+    <div class="pillar glass"><span class="p-ico">🔓</span><h4>Open infrastructure</h4><p>Powered by open AI. No vendor lock-in. The rendering never stops.</p></div>
+    <div class="pillar glass"><span class="p-ico">⚗</span><h4>Maker-grade outputs</h4><p>Every blueprint is written for the bench — alloy specs, bur sizes, setting techniques.</p></div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-col">
+      <p class="footer-col-title">Pages</p>
+      <div class="footer-col-links">
+        <a href="#hero">Home</a>
+        <a href="#" onclick="openBookDemo();return false;">Pricing</a>
+        <a href="https://cal.com/soham-jariwala-4fvbkw/15min" target="_blank" rel="noopener">Contact</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Legal</p>
+      <div class="footer-col-links">
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms &amp; conditions</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-bottom">
+    <p class="footer-copy">VLTAVA 2026. All Rights Reserved.</p>
+    <div class="footer-socials">
+      <a href="https://www.linkedin.com/in/soham-jariwala-18297520a" target="_blank" rel="noopener" class="social-btn" title="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://twitter.com" target="_blank" rel="noopener" class="social-btn" title="X / Twitter">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
